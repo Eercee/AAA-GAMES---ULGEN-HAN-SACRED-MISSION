@@ -9,12 +9,19 @@ public class PlayerAttack : MonoBehaviour
     public Transform attackPoint;
     public float effectDelay = 0.5f;
     public AudioClip attackSound;
-    //public ParticleSystem attackEffect;
+
+    private Animator animator;
+
+    void Start()
+    {
+        animator = GetComponent<Animator>();
+    }
 
     void Update()
     {
         if (Input.GetMouseButtonDown(0))
         {
+            animator.SetBool("isAttacking", true);
             StartCoroutine(PerformAttack());
         }
     }
@@ -25,12 +32,7 @@ public class PlayerAttack : MonoBehaviour
         {
             AudioSource.PlayClipAtPoint(attackSound, transform.position);
         }
-        /*
-        if (attackEffect != null)
-        {
-            attackEffect.Play();
-        }
-        */
+
         yield return new WaitForSeconds(effectDelay);
 
         Collider[] hitEnemies = Physics.OverlapSphere(attackPoint.position, attackRange, attackLayer);
@@ -49,6 +51,8 @@ public class PlayerAttack : MonoBehaviour
         {
             Debug.Log("Saldýrý boþa gitti.");
         }
+
+        animator.SetBool("isAttacking", false);
     }
 
     private void OnDrawGizmosSelected()
