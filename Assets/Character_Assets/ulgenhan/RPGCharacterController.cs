@@ -24,8 +24,8 @@ public class RPGCharacterController : MonoBehaviour
 
     void Update()
     {
-        // Eðer saldýrý yapýlýyorsa diðer iþlemleri engelle
-        if (isAttacking)
+        // Eðer saldýrý yapýlýyorsa veya UI açýk durumdaysa diðer iþlemleri engelle
+        if (isAttacking || IsDialogueActive())
             return;
 
         float currentSpeed = moveSpeed; // Varsayýlan olarak yürüme hýzý
@@ -35,7 +35,7 @@ public class RPGCharacterController : MonoBehaviour
         {
             isAttacking = true;
             animator.Play("Armature|Armature|Left_Slash|baselayer");
-            Invoke("EndAttack", 1.5f); // Saldýrý animasyonu süresine göre bir gecikme ayarla (örneðin 0.8 saniye)
+            Invoke("EndAttack", 1.5f); // Saldýrý animasyonu süresine göre bir gecikme ayarla
             return;
         }
 
@@ -86,6 +86,23 @@ public class RPGCharacterController : MonoBehaviour
     void EndAttack()
     {
         isAttacking = false;
+    }
+
+    // UI Paneli açýk mý kontrol eder
+    bool IsDialogueActive()
+    {
+        GameObject dialoguePanel = GameObject.Find("Panel"); // Panel adýný kontrol edin
+        return dialoguePanel != null && dialoguePanel.activeSelf;
+    }
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Shahmeran"))
+        {
+            // Animasyonu idle'a geçir
+            animator.SetBool("isWalking", false);
+            animator.SetBool("isRunning", false);
+            animator.Play("Armature|Armature|Combat_Stance|baselayer"); // Idle animasyonu
+        }
     }
 
 }
