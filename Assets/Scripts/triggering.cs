@@ -44,11 +44,19 @@ public class ZombieAI : MonoBehaviour
             {
                 AttackPlayer();
             }
-            
         }
-        else if (distanceToPlayer <= runRange)
+        else if (distanceToPlayer > attackRange && distanceToPlayer <= runRange)
         {
             isAttacking = false;
+            animator.SetBool("isRunning", true);
+            animator.SetBool("isWalking", false);
+            ChasePlayer();
+        }
+        else if (distanceToPlayer > runRange && distanceToPlayer <= agroRadius)
+        {
+            isAttacking = false;
+            animator.SetBool("isRunning", false);
+            animator.SetBool("isWalking", true);
             ChasePlayer();
         }
         else
@@ -56,17 +64,11 @@ public class ZombieAI : MonoBehaviour
             isAttacking = false;
             animator.SetBool("isRunning", false);
             animator.SetBool("isWalking", false);
-            animator.SetBool("isWalking", true);
         }
     }
 
     void ChasePlayer()
     {
-        // Oyuncuyu kovala
-        animator.SetBool("isRunning", true);
-        animator.SetBool("isWalking", false);
-        
-
         Vector3 targetPosition = new Vector3(player.position.x, transform.position.y, player.position.z);
         transform.LookAt(targetPosition);
         transform.position = Vector3.MoveTowards(transform.position, targetPosition, Time.deltaTime * 3f);
@@ -74,12 +76,13 @@ public class ZombieAI : MonoBehaviour
 
     void AttackPlayer()
     {
-        
         isAttacking = true;
+        animator.SetBool("isAttacking", true);
         animator.SetBool("isRunning", false);
-        animator.SetTrigger("AttackTrigger");
-        
+        animator.SetBool("isWalking", false);
+        //animator.SetTrigger("AttackTrigger");
     }
+
     /*
     private void OnTriggerStay(Collider other)
     {
