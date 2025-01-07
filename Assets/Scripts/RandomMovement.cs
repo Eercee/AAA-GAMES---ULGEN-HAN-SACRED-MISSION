@@ -6,35 +6,34 @@ public class RandomWalking : MonoBehaviour
     private NavMeshAgent agent;
     private Animator animator;
 
-    public float range = 10.0f; // Rastgele hareket alaný
+    public float range = 10.0f;
 
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
 
-        // Sürekli yürüme animasyonu baþlat
         if (animator != null)
         {
             animator.SetBool("isWalking", true);
         }
 
-        // Ýlk hedefi belirle
         SetRandomDestination();
     }
 
     void Update()
     {
-        // Yeni bir hedef belirleme (eðer hedefe ulaþýldýysa)
         if (!agent.pathPending && agent.remainingDistance <= agent.stoppingDistance)
         {
             SetRandomDestination();
         }
+
+        UpdateAnimation();
+        RotateTowardsMovementDirection();
     }
 
     void SetRandomDestination()
     {
-        // Rastgele bir pozisyon belirle
         Vector3 randomDirection = Random.insideUnitSphere * range;
         randomDirection += transform.position;
 
@@ -42,6 +41,24 @@ public class RandomWalking : MonoBehaviour
         if (NavMesh.SamplePosition(randomDirection, out hit, range, 1))
         {
             agent.SetDestination(hit.position);
+        }
+    }
+
+    void UpdateAnimation()
+    {
+        if (animator != null)
+        {
+            animator.SetFloat("Speed", agent.velocity.magnitude);
+        }
+    }
+
+    void RotateTowardsMovementDirection()
+    {
+        if (agent.velocity.sqrMagnitude > 0.01f) 
+        {
+            Vector3 direction = agent.velocity.normalized;
+            Quaternion lookRotation = Quaternion.LookRotation(direction);
+            transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 5f); 
         }
     }
 }
