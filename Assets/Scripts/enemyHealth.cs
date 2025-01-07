@@ -5,7 +5,7 @@ public class EnemyHealth : MonoBehaviour
     public int maxHealth = 100;
     private int currentHealth;
     private bool isDead = false;
-
+    private Animator animator;
     public HealthBar healthBar;
     public Transform healthBarCanvas;
 
@@ -46,6 +46,7 @@ public class EnemyHealth : MonoBehaviour
 
         if (currentHealth <= 0)
         {
+            animator.SetBool("isDead", true);
             Die();
         }
     }
