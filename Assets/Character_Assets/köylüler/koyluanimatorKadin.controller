@@ -44,8 +44,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 4241242628387246618, guid: 6e94a5924b294734dbb6a5568eb7ef2f,
-    type: 3}
+  m_Motion: {fileID: 7400000, guid: 8dde0c70d553d8f489510bd40e777ed9, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -79,7 +78,7 @@ AnimatorController:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: koyluanimator
+  m_Name: koyluanimatorKadin
   serializedVersion: 5
   m_AnimatorParameters:
   - m_Name: isWalking

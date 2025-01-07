@@ -1,4 +1,3 @@
-using System.Collections;
 using UnityEngine;
 
 public class etriggering : MonoBehaviour
@@ -42,27 +41,34 @@ public class etriggering : MonoBehaviour
 
         if (distanceToPlayer <= attackRange)
         {
-            AttackPlayer();
-        }
-        else if (distanceToPlayer > attackRange && distanceToPlayer <= runRange)
-        {
-            isAttacking = false;
-            animator.SetBool("isRunning", true);
-            animator.SetBool("isWalking", false);
-            ChasePlayer();
-        }
-        else if (distanceToPlayer > runRange && distanceToPlayer <= agroRadius)
-        {
-            isAttacking = false;
-            animator.SetBool("isRunning", false);
-            animator.SetBool("isWalking", true);
-            ChasePlayer();
+            if (!isAttacking)
+            {
+                AttackPlayer();
+            }
         }
         else
         {
-            isAttacking = false;
-            animator.SetBool("isRunning", false);
-            animator.SetBool("isWalking", false);
+            if (isAttacking)
+            {
+                StopAttack();
+            }
+
+            if (distanceToPlayer > attackRange && distanceToPlayer <= runRange)
+            {
+                animator.SetBool("isRunning", true);
+                animator.SetBool("isWalking", false);
+                ChasePlayer();
+            }
+            else if (distanceToPlayer > runRange && distanceToPlayer <= agroRadius)
+            {
+                animator.SetBool("isRunning", false);
+                animator.SetBool("isWalking", true);
+                ChasePlayer();
+            }
+            else
+            {
+                ResetAnimatorParams();
+            }
         }
     }
 
@@ -85,17 +91,20 @@ public class etriggering : MonoBehaviour
 
     void AttackPlayer()
     {
-        if (!isAttacking)
-        {
-            ResetAnimatorParams();
-            isAttacking = true;
-            animator.SetBool("isAttacking", true);
+        ResetAnimatorParams();
+        isAttacking = true;
+        animator.SetBool("isAttacking", true);
 
-            if (rb != null)
-            {
-                rb.velocity = Vector3.zero;
-            }
+        if (rb != null)
+        {
+            rb.velocity = Vector3.zero;
         }
+    }
+
+    void StopAttack()
+    {
+        isAttacking = false;
+        animator.SetBool("isAttacking", false);
     }
 
     private void ResetAnimatorParams()
@@ -105,7 +114,7 @@ public class etriggering : MonoBehaviour
         animator.SetBool("isAttacking", false);
     }
 
-    private void OnTriggerStay(Collider other)
+    /*private void OnTriggerStay(Collider other)
     {
         if (other.CompareTag("Player") && isAttacking)
         {
@@ -116,17 +125,12 @@ public class etriggering : MonoBehaviour
             }
         }
     }
-
+    */
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
             Debug.Log("Player algýlandý, kovalamaya baþla!");
         }
-    }
-
-    public void EndAttack()
-    {
-        isAttacking = false;
     }
 }
