@@ -48,22 +48,22 @@ public class ZombieAI : MonoBehaviour
         else if (distanceToPlayer > attackRange && distanceToPlayer <= runRange)
         {
             isAttacking = false;
-            animator.SetBool("isRunning", true);
-            animator.SetBool("isWalking", false);
+            animator.SetBool("isAttacking", false);
+            animator.SetBool("isWalking", true);
             ChasePlayer();
         }
         else if (distanceToPlayer > runRange && distanceToPlayer <= agroRadius)
         {
             isAttacking = false;
-            animator.SetBool("isRunning", false);
+            animator.SetBool("isAttacking", false);
             animator.SetBool("isWalking", true);
             ChasePlayer();
         }
         else
         {
             isAttacking = false;
-            animator.SetBool("isRunning", false);
-            animator.SetBool("isWalking", false);
+            animator.SetBool("isAttacking", false);
+            animator.SetBool("isWalking", true);
         }
     }
 
@@ -78,7 +78,6 @@ public class ZombieAI : MonoBehaviour
     {
         isAttacking = true;
         animator.SetBool("isAttacking", true);
-        animator.SetBool("isRunning", false);
         animator.SetBool("isWalking", false);
         //animator.SetTrigger("AttackTrigger");
     }
